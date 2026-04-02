@@ -42,6 +42,26 @@ function sendWithdrawMessages(payload) {
 	});
 }
 
+function getUnreadDepositChatMessagesCount() {
+	return Repository.get(`/deposit-chat/unread-messages`);
+}
+
+function getUnreadWithdrawChatMessagesCount() {
+	return Repository.get(`/withdraw-chat/unread-messages`);
+}
+
+function readDepositChatMessages() {
+	return Repository.post(`/deposit-chat/read-messages`);
+}
+
+function readWithdrawChatMessages() {
+	return Repository.post(`/withdraw-chat/read-messages`);
+}
+
+function getGroupMemberMessages() {
+	return Repository.get(`/group-member-messages`);
+}
+
 export {
 	sendGroupPostingMessages,
 	sendWithdrawMessages,
@@ -49,4 +69,9 @@ export {
 	getGroupPostingMessages,
 	getWithdrawMessages,
 	getDepositMessages,
+	getUnreadDepositChatMessagesCount,
+	getUnreadWithdrawChatMessagesCount,
+	readDepositChatMessages,
+	readWithdrawChatMessages,
+	getGroupMemberMessages,
 };

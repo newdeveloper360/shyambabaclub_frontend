@@ -37,6 +37,7 @@ import CanceledHistory from './views/CanceledHistory';
 import { GameHistoryProvider } from './context/GameHistoryContext';
 import useOneSignal from './hooks/useOneSignal';
 import happyHolidayImg from './assets/imgs/happyHolidays.png'
+import GroupMessage from './views/GroupMessage';
 // import Pusher from 'pusher-js';
 // import Swal from 'sweetalert2';
 
@@ -107,6 +108,11 @@ export const routes = [
 				path: '/notifications',
 				element: <Notifications />,
 				name: 'Help',
+			},
+			{
+				path: '/group-message',
+				element: <GroupMessage />,
+				name: 'Group Message',
 			},
 		],
 	},
@@ -229,6 +235,7 @@ const App = () => {
 					if (!data.error) {
 						dispatch(setAppData(data.response));
 						setLoading(false);
+						localStorage.setItem('isGroupMember', data.response.user?.is_group_member ?? 0);
 					} else {
 						setError(data.message);
 					}

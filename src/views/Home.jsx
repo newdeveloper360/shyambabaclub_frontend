@@ -11,20 +11,86 @@ import Modal from '../components/Modal';
 import { GameHistoryContext } from "../context/GameHistoryContext";
 import { setBetModelCookie, getCookie } from "../utils/CookieGetSet";
 import { deleteUserDataHistory } from "../repository/HistoryRepository";
+import { getUnreadDepositChatMessagesCount, getUnreadWithdrawChatMessagesCount, readDepositChatMessages, readWithdrawChatMessages } from "../repository/ChatRepository";
+import { toast } from "react-toastify";
 
 const Home = () => {
   let { appData } = useSelector((state) => state.appData.appData);
   let { markets } = useSelector((state) => state.markets);
   let [isOpen, setOpen] = useState(true)
   let [isOpenBetCanceledModal, setOpenBetCanceledModal] = useState(true);
+  let [unreadDepositChatMessagesCount, setUnreadDepositChatMessagesCount] = useState(0);
+  let [unreadWithdrawChatMessagesCount, setUnreadWithdrawChatMessagesCount] = useState(0);
   const { historyData } = useContext(GameHistoryContext);
+  const isGroupMember = localStorage.getItem('isGroupMember');
+
+  const style = {
+    marginTop: "-10px",
+    marginLeft: "-6px",
+    borderRadius: "2px",
+    padding: "0px 3px",
+    background: "#dd982b",
+    fontSize: "8px",
+    color: "#fff",
+    fontWeight: "bold",
+  };
 
   const getCurrentDate = () => {
     return moment(moment.now()).format("YYYY-MM-DD");
   };
 
+  const fetchUnreadDepositChatMessagesCount = async () => {
+    try {
+      const { data } = await getUnreadDepositChatMessagesCount();
+      if(data.error) {
+        toast.error(data.message);
+      } else {
+        setUnreadDepositChatMessagesCount(data.response.unreadMessagesCount);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  }
+
+  const fetchUnreadWithdrawChatMessagesCount = async () => {
+    try {
+      const { data } = await getUnreadWithdrawChatMessagesCount();
+      if(data.error) {
+        toast.error(data.message);
+      } else {
+        setUnreadWithdrawChatMessagesCount(data.response.unreadMessagesCount);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  }
+  
+  const fetchReadDepositChatMessages = async () => {
+    try {
+      const { data } = await readDepositChatMessages();
+      if(data.error) {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  }
+
+  const fetchReadWithdrawChatMessages = async () => {
+    try {
+      const { data } = await readWithdrawChatMessages();
+      if(data.error) {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  }
+
   useEffect(() => {
     document.title = "Home | Morvi Nnandan";
+    fetchUnreadDepositChatMessagesCount();
+    fetchUnreadWithdrawChatMessagesCount();
   }, [])
 
   const toggle = () => {
@@ -45,28 +111,38 @@ const Home = () => {
     <div className="p-3 pt-1 pb-5">
       <div className="grid grid-cols-3 gap-2">
         <div className="flex flex-col items-center justify-center">
-          <Link to="/deposit-chat" className="inline-block">
+          <Link to="/deposit-chat" className="inline-block flex items-center justify-center" onClick={fetchReadDepositChatMessages}>
             <img className="h-9" alt="Deposit" src={Deposit} />
+            {unreadDepositChatMessagesCount > 0 && (
+              <span style={style}>{unreadDepositChatMessagesCount}</span>
+            )}
           </Link>
-          <Link to="/withdrawal-chat" className="inline-block">
+          <Link to="/withdrawal-chat" className="inline-block flex items-center justify-center" onClick={fetchReadWithdrawChatMessages}>
             <img className="h-9" alt="Withdraw" src={Withdraw} />
+            {unreadWithdrawChatMessagesCount > 0 && (
+              <span style={style}>{unreadWithdrawChatMessagesCount}</span>
+            )}
           </Link>
         </div>
         <div className="flex items-center justify-center">
           <img alt="Logo" src={Logo} className="h-20" />
         </div>
         <div className="flex flex-col justify-center">
-          <a
+          {/* <a
             href={appData?.result_history_webview_url}
             target="_blank"
             rel="noreferrer"
             className="flex items-center justify-center w-full px-2 py-2 text-xs text-white bg-orange-300 rounded-md shadow-md bg-orange"
           >
             Other Game
-          </a>
-          <button onClick={clearData} className="flex items-center justify-center w-full px-2 py-2 mt-1 text-xs text-white bg-orange-300 rounded-md shadow-md bg-greenLight">
+          </a> */}
+          {/* <button onClick={clearData} className="flex items-center justify-center w-full px-2 py-2 mt-1 text-xs text-white bg-orange-300 rounded-md shadow-md bg-greenLight">
             Clear Data
-          </button>
+          </button> */}
+
+          <a href={appData?.app_update_link} className="flex items-center justify-center w-full h-full px-2 py-2 mt-1 text-xs text-white bg-orange-300 rounded-md shadow-md bg-[#50d71e]">
+            एप्लीकेशन डाउनलोड करने के लिए यहां क्लिक करे !
+          </a>
         </div>
       </div>
       <marquee
@@ -83,6 +159,13 @@ const Home = () => {
         ></div>
         <Timer />
       </div>
+
+      {isGroupMember == 1 && 
+        <div className="flex justify-center">
+          <Link to='/group-message' className="group-message-button mb-3">Group Message</Link>
+        </div>
+      }
+      
       <div className="flex flex-col items-center justify-center p-2 mb-3 font-semibold text-center text-black bg-white border rounded-md shadow-sm">
         <span className="text-sm">{markets?.current_result_card?.market?.name}</span>
         <span className="text-sm">Result</span>

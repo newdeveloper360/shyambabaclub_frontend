@@ -67,3 +67,84 @@ div:where(.swal2-container) button:where(.swal2-styled)
 div:where(.swal2-container) div:where(.swal2-actions) {
   margin: 2px !important;
 }
+
+/* Group Message */
+.group-message-button {
+  background: #dd982b;
+  color: #fff;
+  padding: 7px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+  transition: all 0.3s ease;
+  font-size: 13px;
+  font-weight: 400;
+}
+
+.group-message-button:hover {
+  background: #fff;
+  border: 1px solid #dd982b;
+  color: #dd982b;
+}
+
+/* Group Message CSS */
+.chat-wrapper {
+  /* background-color: #efefff; */
+  background-color: #fce8c8;
+  height: 100%;
+}
+
+.msgcard {
+  width: 100%;
+}
+
+.chat-log {
+  padding: 10px;
+  overflow-y: auto;
+	height: calc(80vh);
+}
+
+.chat-log_item {
+  /* background: #d5f4e7; */
+  background: #dd982b;
+  padding: 10px;
+  margin-bottom: 10px;
+  max-width: 70%;
+  float: left;
+  font-size: 13px;
+  border-radius: 0 20px 20px 20px;
+  clear: both;
+}
+
+.chat-log_img img{
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+}
+
+.chat-log_message p{
+  font-size: 12px;
+}
+
+.chat-log_time {
+  font-size: 10px;
+  opacity: 0.5;
+}
+
+.chat-log_time .link {
+  cursor: pointer;
+  color: #000;
+}
+
+.opacity-line {
+  opacity: 0.5;
+}
+
+.chat-footer {
+  background-color: #97e3c2;
+}
+
+textarea {
+  resize: none;
+}
