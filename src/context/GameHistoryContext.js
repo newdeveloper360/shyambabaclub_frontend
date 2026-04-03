@@ -29,7 +29,9 @@ export function GameHistoryProvider({ children }) {
   };
 
   useEffect(() => {
-    fetchCurrentHistory();
+    if(localStorage.getItem('authToken')) {
+      fetchCurrentHistory();
+    }
   }, [currentPage, date, marketId]); // Runs when dependencies change
 
   return (

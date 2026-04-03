@@ -23,16 +23,25 @@ const Home = () => {
   let [unreadWithdrawChatMessagesCount, setUnreadWithdrawChatMessagesCount] = useState(0);
   const { historyData } = useContext(GameHistoryContext);
   const isGroupMember = localStorage.getItem('isGroupMember');
+  const newGroupMessageId = localStorage.getItem('newGroupMessageId');
+  const lastSeenGroupMessageId = localStorage.getItem('lastSeenGroupMessageId');
 
   const style = {
-    marginTop: "-10px",
-    marginLeft: "-6px",
+    width: "20px",
+    height: "20px",
+    marginTop: "-20px",
+    marginLeft: "-10px",
     borderRadius: "2px",
     padding: "0px 3px",
-    background: "#dd982b",
-    fontSize: "8px",
+    background: "#f21000",
+    fontSize: "11px",
     color: "#fff",
     fontWeight: "bold",
+    textAlign: "center",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: "50%",
   };
 
   const getCurrentDate = () => {
@@ -89,8 +98,10 @@ const Home = () => {
 
   useEffect(() => {
     document.title = "Home | Morvi Nnandan";
-    fetchUnreadDepositChatMessagesCount();
-    fetchUnreadWithdrawChatMessagesCount();
+    if(localStorage.getItem('authToken')) {
+      fetchUnreadDepositChatMessagesCount();
+      fetchUnreadWithdrawChatMessagesCount();
+    }
   }, [])
 
   const toggle = () => {
@@ -151,6 +162,19 @@ const Home = () => {
       >
         {appData?.home_message}
       </marquee>
+
+      {isGroupMember == 1 && 
+        <div className="inline-block flex items-center justify-center">
+          <Link to='/group-message' className="group-message-button mb-3">Group Message</Link>
+          {newGroupMessageId - lastSeenGroupMessageId > 0 && (
+              <span style={style}>
+                {newGroupMessageId - lastSeenGroupMessageId}
+              </span>
+            )
+          }
+        </div>
+      }
+      
       <div className="flex flex-col items-center justify-center p-2 mb-3 font-semibold text-center text-white bg-black border rounded-md shadow-sm">
         <div
           dangerouslySetInnerHTML={{
@@ -159,12 +183,6 @@ const Home = () => {
         ></div>
         <Timer />
       </div>
-
-      {isGroupMember == 1 && 
-        <div className="flex justify-center">
-          <Link to='/group-message' className="group-message-button mb-3">Group Message</Link>
-        </div>
-      }
       
       <div className="flex flex-col items-center justify-center p-2 mb-3 font-semibold text-center text-black bg-white border rounded-md shadow-sm">
         <span className="text-sm">{markets?.current_result_card?.market?.name}</span>

@@ -236,6 +236,7 @@ const App = () => {
 						dispatch(setAppData(data.response));
 						setLoading(false);
 						localStorage.setItem('isGroupMember', data.response.user?.is_group_member ?? 0);
+						localStorage.setItem('newGroupMessageId', data.response?.newGroupMessageId ?? 0);
 					} else {
 						setError(data.message);
 					}

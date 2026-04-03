@@ -22,6 +22,7 @@ const GroupMessage = () => {
                     toast.error(data.message);
                 } else {
                     setGroupMemberMessages(data.response.data);
+                    localStorage.setItem('lastSeenGroupMessageId', data.response.lastSeenGroupMessageId ?? 0);
                 }
             } catch (error) {
                 toast.error(error.message);
@@ -62,16 +63,21 @@ const GroupMessage = () => {
 
                     {/* <hr className="my-1 py-0 col-8 opacity-line" /> */}
 
-                    <div className="chat-log_time m-0 p-0 flex flex-col items-end justify-center">
+                    <div className="chat-log_time m-0 p-0">
                         <div>
-                            <span>{moment(message.created_at).format("hh:mm A")}</span>
                             {message.link && (
                                 <span className="ml-1 link">
                                     <a href={message.link} target="_blank" rel="noreferrer">
-                                        <i className="fas fa-link"></i>
+                                        <i className="fas fa-link"></i> {message.link}
                                     </a>
                                 </span>
                             )}
+                        </div>
+                    </div>
+
+                    <div className="chat-log_time mt-1 p-0 flex items-end justify-end">
+                        <div>
+                            <span>{moment(message.created_at).format("hh:mm A")}</span>
                         </div>
                     </div>
                 </div>

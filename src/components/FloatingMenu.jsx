@@ -132,7 +132,9 @@ const FloatingMenu = () => {
       }
     };
 
-    fetchData();
+    if(localStorage.getItem('authToken')) {
+      fetchData();
+    }
   }, [lastVisitedHelp]);
   
   return (
