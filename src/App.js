@@ -34,6 +34,7 @@ import { ModalContextProvider } from './context/ModalContext';
 import { DeferredPromptContextProvider } from './context/DeferredPromptContext';
 import NotFound from './views/NotFound';
 import CanceledHistory from './views/CanceledHistory';
+import Passbook from './views/Passbook';
 import { GameHistoryProvider } from './context/GameHistoryContext';
 import useOneSignal from './hooks/useOneSignal';
 import happyHolidayImg from './assets/imgs/happyHolidays.png'
@@ -83,6 +84,11 @@ export const routes = [
 				path: '/bonus-report',
 				element: <BonusReport />,
 				name: 'Bonus Report',
+			},
+			{
+				path: '/passbook',
+				element: <Passbook />,
+				name: 'Passbook',
 			},
 			{
 				path: '/result-history',

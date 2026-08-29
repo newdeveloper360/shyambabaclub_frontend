@@ -149,3 +149,12 @@ div:where(.swal2-container) div:where(.swal2-actions) {
 textarea {
   resize: none;
 }
+
+/* Passbook */
+.passbook-amount-credit {
+  color: #16a34a;
+}
+
+.passbook-amount-debit {
+  color: #dc2626;
+}
