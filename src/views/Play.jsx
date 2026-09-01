@@ -6,24 +6,26 @@ import { GoDotFill } from "react-icons/go";
 const getRandomNumber = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
 
 const Play = () => {
-  const { markets } = useSelector(state => state?.markets?.markets);
+  const { markets: marketsPayload } = useSelector((state) => state.markets);
+  const markets = marketsPayload?.markets || [];
 
-  const [liveNumbers, setLiveNumbers] = useState(
-    markets?.map(() => getRandomNumber(1700, 2500))
-  );
-  const [bidsNumbers, setBidsNumbers] = useState(
-    markets?.map(() => getRandomNumber(17000, 25000))
-  );
+  const [liveNumbers, setLiveNumbers] = useState([]);
+  const [bidsNumbers, setBidsNumbers] = useState([]);
   const [direction, setDirection] = useState("up");
   const [updateCount, setUpdateCount] = useState(0);
-  const [showNumbers, setShowNumbers] = useState(true); // New state to control visibility
+  const [showNumbers, setShowNumbers] = useState(true);
+
+  useEffect(() => {
+    if (!markets.length) return;
+    setLiveNumbers(markets.map(() => getRandomNumber(1700, 2500)));
+    setBidsNumbers(markets.map(() => getRandomNumber(17000, 25000)));
+  }, [markets.length]);
 
   useEffect(() => {
     const interval = setInterval(() => {
       setUpdateCount(prevCount => {
         const newCount = prevCount + 1;
         if (newCount >= 3) {
-          // Change direction every 3 updates
           setDirection(prevDirection => (prevDirection === "up" ? "down" : "up"));
           return 0;
         }
@@ -31,18 +33,18 @@ const Play = () => {
       });
 
       setLiveNumbers(prevLiveNumbers =>
-        prevLiveNumbers.map(num => 
+        (prevLiveNumbers || []).map(num =>
           direction === "up"
             ? num + getRandomNumber(10, 50) - getRandomNumber(0, 10)
-            : num - getRandomNumber(0, 10) // Ensure decrement is within 0-10 range
+            : num - getRandomNumber(0, 10)
         )
       );
 
       setBidsNumbers(prevBidsNumbers =>
-        prevBidsNumbers.map(num => 
+        (prevBidsNumbers || []).map(num =>
           direction === "up"
             ? num + getRandomNumber(50, 250) - getRandomNumber(0, 50)
-            : num - getRandomNumber(0, 50) // Ensure decrement is within 0-10 range
+            : num - getRandomNumber(0, 50)
         )
       );
     }, 3000);
@@ -58,10 +60,10 @@ const Play = () => {
             {showNumbers && market?.game_on && ( 
               <div className="w-full flex justify-center gap-2 mb-1">
                 <div className="px-2 rounded-md bg-orange flex justify-center items-center text-[12px]">
-                  <GoDotFill size={18} color="#fff" />LIVE: {liveNumbers[index]}
+                  <GoDotFill size={18} color="#fff" />LIVE: {liveNumbers?.[index]}
                 </div>
                 <div className="px-2 rounded-md flex justify-center items-center text-[12px] text-[#fff]">
-                  <GoDotFill size={18} color="#d80522" />Bids: {bidsNumbers[index]}
+                  <GoDotFill size={18} color="#d80522" />Bids: {bidsNumbers?.[index]}
                 </div>
               </div>
             )}
