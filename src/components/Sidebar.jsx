@@ -92,7 +92,7 @@ const Sidebar = ({ toggleSideBar }) => {
       onClick: async (e) => {
         e.preventDefault();
         const shareText = `Share this Amazing game app with your friends! Use My Refer Code: ${user?.own_code}`;
-        const shareUrl = "https://new.morvinnandan.club";
+        const shareUrl = "https://morvinnandan.site";
 
         if (navigator.share) {
           try {
